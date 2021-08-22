@@ -136,3 +136,6 @@ eval_dirs/
 nohup.out
 *.pth
 .idea/
+
+#data directory
+data/*
