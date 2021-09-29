@@ -8,8 +8,8 @@ img_shape = (112, 112)
 overlap_ratio = 0.25
 
 data = dict(
-    samples_per_gpu=2,
-    workers_per_gpu=2,
+    samples_per_gpu=4,
+    workers_per_gpu=4,
     train=dict(
         typename=dataset_type,
         ann_file=data_root + 'annotations/val.json',
@@ -202,7 +202,7 @@ hooks = [
 
 # 5. work modes
 modes = ['train']
-max_epochs = 5 #1200
+max_epochs = 1200 #1200
 
 # 6. checkpoint
 weights = dict(
