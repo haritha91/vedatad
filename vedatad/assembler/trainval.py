@@ -8,6 +8,7 @@ from vedatad.engines import build_engine
 
 
 def trainval(cfg, distributed, logger):
+    print('assembler trainval method!')
 
     for mode in cfg.modes:
         assert mode in ('train', 'val')

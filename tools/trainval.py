@@ -28,6 +28,7 @@ def main():
     args = parse_args()
 
     cfg = Config.fromfile(args.config)
+    print('args loaded!')
 
     if args.launcher == 'none':
         distributed = False
@@ -50,6 +51,7 @@ def main():
 
     # create work_dir
     mkdir_or_exist(osp.abspath(cfg.workdir))
+    print('workdir created!')
     shutil.copy(args.config, cfg.workdir)
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())

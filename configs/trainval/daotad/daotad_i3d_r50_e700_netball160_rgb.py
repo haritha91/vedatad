@@ -1,5 +1,5 @@
 # 1. data
-dataset_type = 'Thumos14Dataset'
+dataset_type = 'Netball160Dataset'
 data_root = 'data/netball160/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
