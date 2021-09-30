@@ -13,7 +13,7 @@ from .custom import CustomDataset
 class Netball160Dataset(CustomDataset):
     """Netball160 dataset for temporal action detection."""
 
-    CLASSES = ('Center Pass', 'Shots', 'GC Feed')
+    CLASSES = ('Center Pass', 'Shots', 'GC Feed', 'TOG')
 
     def __init__(self, **kwargs):
         super(Netball160Dataset, self).__init__(**kwargs)
