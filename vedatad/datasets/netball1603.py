@@ -10,15 +10,15 @@ from .custom import CustomDataset
 
 
 @registry.register_module('dataset')
-class Netball160Dataset(CustomDataset):
-    """Netball160 dataset for temporal action detection."""
+class Netball1603Dataset(CustomDataset):
+    """Netball1603 - 3 class dataset for temporal action detection."""
 
-    CLASSES = ('Center Pass', 'Shots', 'GC Feed', 'TOG')
-    # CLASSES = ('Center Pass', 'Shots', 'GC Feed')
+    # CLASSES = ('Center Pass', 'Shots', 'GC Feed', 'TOG')
+    CLASSES = ('Center Pass', 'Shots', 'GC Feed')
 
 
     def __init__(self, **kwargs):
-        super(Netball160Dataset, self).__init__(**kwargs)
+        super(Netball1603Dataset, self).__init__(**kwargs)
 
     def load_annotations(self, ann_file):
         """Load annotation from Netball160 json ann_file.
