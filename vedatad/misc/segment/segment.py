@@ -106,6 +106,78 @@ def segment_overlaps(segments1,
 
     return ious
 
+def temporal_distance(segments1, segments2, is_aligned=False):
+    """Calculate distance between two midpoints of segments.
+    If ``is_aligned`` is ``False``, then calculate the distances between each
+    midpoint of segments1 and segments2, otherwise the distances between each aligned
+     pair of segments1 and segments2.
+    Args:
+        segments1 (Tensor): shape (m, 2) in <t1, t2> format or empty.
+        segments2 (Tensor): shape (n, 2) in <t1, t2> format or empty.
+            If is_aligned is ``True``, then m and n must be equal.
+    Returns:
+        invds(Tensor): shape (m, n) if is_aligned == False else shape (m, 1)
+    Example:
+        >>> segments1 = torch.FloatTensor([
+        >>>     [0, 10],
+        >>>     [10, 20],
+        >>>     [32, 38],
+        >>> ])
+        >>> segments2 = torch.FloatTensor([
+        >>>     [0, 20],
+        >>>     [0, 19],
+        >>>     [10, 20],
+        >>> ])
+        >>> inv_distances(segments1, segments2)
+        tensor([[2.5000,  4.5000, 10.0000],
+                [7.5000,  5.5000,  0.0000],
+                [27.5000, 25.5000, 20.0000]])
+    Example:
+        >>> empty = torch.FloatTensor([])
+        >>> nonempty = torch.FloatTensor([
+        >>>     [0, 9],
+        >>> ])
+        >>> assert tuple(inv_distances(empty, nonempty).shape) == (0, 1)
+        >>> assert tuple(inv_distances(nonempty, empty).shape) == (1, 0)
+        >>> assert tuple(inv_distances(empty, empty).shape) == (0, 0)
+    """
+
+    is_numpy = False
+    if isinstance(segments1, np.ndarray):
+        segments1 = torch.from_numpy(segments1)
+        is_numpy = True
+    if isinstance(segments2, np.ndarray):
+        segments2 = torch.from_numpy(segments2)
+        is_numpy = True
+
+    # Either the segments are empty or the length of segments's last dimenstion
+    # is 2
+    assert (segments1.size(-1) == 2 or segments1.size(0) == 0)
+    assert (segments2.size(-1) == 2 or segments2.size(0) == 0)
+
+    rows = segments1.size(0)
+    cols = segments2.size(0)
+    if is_aligned:
+        assert rows == cols
+
+    if rows * cols == 0:
+        return segments1.new(rows, 1) if is_aligned else segments2.new(
+            rows, cols)
+
+    if is_aligned:
+        segments1_midpoints = torch.mean(segments1, dim=1)
+        segments2_midpoints = torch.mean(segments2, dim=1)
+        abs_distance = torch.abs(segments1_midpoints.unsqueeze(1) - segments2_midpoints)
+    else:
+        segments1_midpoints = torch.mean(segments1, dim=1)
+        segments2_midpoints = torch.mean(segments2, dim=1)
+        abs_distance = torch.abs(segments1_midpoints - segments2_midpoints)
+
+    if is_numpy:
+        abs_distance = abs_distance.numpy()
+
+    return abs_distance
+
 
 def multiclass_nms(multi_segments,
                    multi_scores,
