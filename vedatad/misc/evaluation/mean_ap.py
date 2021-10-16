@@ -6,6 +6,7 @@ from terminaltables import AsciiTable
 
 from vedacore.misc import print_log
 from vedatad.misc.segment import segment_overlaps
+from vedatad.misc.segment import temporal_distance
 
 
 def average_precision(recalls, precisions, mode='area'):
@@ -209,6 +210,100 @@ def tpfp_anet(det_segments,
     return tp, fp
 
 
+def tpfp_distance(det_segments,
+                 gt_segments,
+                 gt_segments_ignore=None,
+                 dist_thr=62.5,
+                 area_ranges=None):
+    """Check if detected segments are true positive or false positive.
+
+    Args:
+        det_segments (ndarray): Detected segments of this video, of shape
+            (m, 3).
+        gt_segments (ndarray): GT segments of this video, of shape (n, 2).
+        gt_segments_ignore (ndarray): Ignored gt segments of this video,
+            of shape (k, 2). Default: None
+        dist_thr (float): Distance threshold to be considered as matched.
+            Default: 62.5.
+        area_ranges (list[tuple] | None): Range of segment areas to be
+            evaluated, in the format [(min1, max1), (min2, max2), ...].
+            Default: None.
+
+    Returns:
+        tuple[np.ndarray]: (tp, fp) whose elements are 0 and 1. The shape of
+            each array is (num_scales, m).
+    """
+    # an indicator of ignored gts
+    gt_ignore_inds = np.concatenate(
+        (np.zeros(gt_segments.shape[0], dtype=np.bool),
+         np.ones(gt_segments_ignore.shape[0], dtype=np.bool)))
+    # stack gt_segments and gt_segments_ignore for convenience
+    gt_segments = np.vstack((gt_segments, gt_segments_ignore))
+
+    num_dets = det_segments.shape[0]
+    num_gts = gt_segments.shape[0]
+    if area_ranges is None:
+        area_ranges = [(None, None)]
+    num_scales = len(area_ranges)
+    # tp and fp are of shape (num_scales, num_gts), each row is tp or fp of
+    # a certain scale
+    tp = np.zeros((num_scales, num_dets), dtype=np.float32)
+    fp = np.zeros((num_scales, num_dets), dtype=np.float32)
+
+    # if there is no gt segments in this video, then all det segments
+    # within area range are false positives
+    if gt_segments.shape[0] == 0:
+        if area_ranges == [(None, None)]:
+            fp[...] = 1
+        else:
+            det_areas = det_segments[:, 1] - det_segments[:, 0]
+            for i, (min_area, max_area) in enumerate(area_ranges):
+                fp[i, (det_areas >= min_area) & (det_areas < max_area)] = 1
+        return tp, fp
+
+    # if there is no det segments in this video, return tp, fp
+    if det_segments.shape[0] == 0:
+        return tp, fp
+
+    distances = temporal_distance(det_segments[:, :2], gt_segments)
+
+    # for each det, the min distance with all gts
+    dist_min = distances.min(axis=1)
+
+    # for each det, which gt is mostly close with it
+    dist_argmin = distances.argmin(axis=1)
+
+    # sort all dets in descending order by scores
+    sort_inds = np.argsort(-det_segments[:, -1])
+    for k, (min_area, max_area) in enumerate(area_ranges):
+        gt_covered = np.zeros(num_gts, dtype=bool)
+        # if no area range is specified, gt_area_ignore is all False
+        if min_area is None:
+            gt_area_ignore = np.zeros_like(gt_ignore_inds, dtype=bool)
+        else:
+            gt_areas = gt_segments[:, 1] - gt_segments[:, 0]
+            gt_area_ignore = (gt_areas < min_area) | (gt_areas >= max_area)
+        for i in sort_inds:
+            if dist_min[i] <= dist_thr:
+                matched_gt = dist_argmin[i]
+                if not (gt_ignore_inds[matched_gt]
+                        or gt_area_ignore[matched_gt]):
+                    if not gt_covered[matched_gt]:
+                        gt_covered[matched_gt] = True
+                        tp[k, i] = 1
+                    else:
+                        fp[k, i] = 1
+                # otherwise ignore this detected segment, tp = 0, fp = 0
+            elif min_area is None:
+                fp[k, i] = 1
+            else:
+                segment = det_segments[i, :2]
+                area = segment[1] - segment[0]
+                if min_area <= area < max_area:
+                    fp[k, i] = 1
+    return tp, fp
+
+
 def get_cls_results(det_results, annotations, class_id):
     """Get det results and gt information of a certain class.
 
@@ -292,7 +387,8 @@ def eval_map(det_results,
         if mode in ['anet']:
             tpfp_func = tpfp_anet
         else:
-            tpfp_func = tpfp_default
+            # tpfp_func = tpfp_default
+            tpfp_func = tpfp_distance
         # compute tp and fp for each video with multiple processes
         with ThreadPoolExecutor(nproc) as executor:
             tpfp = executor.map(tpfp_func, cls_dets, cls_gts, cls_gts_ignore,
