@@ -251,18 +251,17 @@ def tpfp_distance_anet(det_segments,
         return tp, fp
 
     #distance based method
+    dist_thr = 62.5
     distances = temporal_distance(det_segments[:, :2], gt_segments)
-    print(distances)
-    dist_thr = 125
-    print('distance treshold - ',dist_thr)
+
     # sort all dets in descending order by scores
     sort_inds = np.argsort(-det_segments[:, -1])
     gt_covered = np.zeros(num_gts, dtype=bool)
     for i in sort_inds:
         gt_distances = distances[i]
-        sort_gt_inds = np.argsort(gt_distances)
+        sort_gt_inds = np.argsort(gt_distances) #get the best to the top of the list
         for matched_gt in sort_gt_inds:
-            if gt_distances[matched_gt] >= dist_thr:
+            if gt_distances[matched_gt] <= dist_thr:
                 if not gt_covered[matched_gt]:
                     gt_covered[matched_gt] = True
                     tp[0, i] = 1
