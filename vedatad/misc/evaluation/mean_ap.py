@@ -212,7 +212,7 @@ def tpfp_anet(det_segments,
 def tpfp_distance_anet(det_segments,
               gt_segments,
               gt_segments_ignore=None,
-              dist_thr=62.5,
+              dist_thr=125,
               scale_ranges=None):
     """Check if detected segments are true positive or false positive.
 
