@@ -452,8 +452,7 @@ def eval_map(det_results,
         if mode in ['anet']:
             print('evaluating with distance function')
             # tpfp_func = tpfp_anet
-            tpfp_func = tpfp_distance
-        else:
+            tpfp_func = tpfp_distance_anet
             # tpfp_func = tpfp_default
             tpfp_func = tpfp_distance
         # compute tp and fp for each video with multiple processes
