@@ -209,6 +209,71 @@ def tpfp_anet(det_segments,
             fp[0, i] = 1
     return tp, fp
 
+def tpfp_distance_anet(det_segments,
+              gt_segments,
+              gt_segments_ignore=None,
+              dist_thr=62.5,
+              scale_ranges=None):
+    """Check if detected segments are true positive or false positive.
+
+    Args:
+        det_segments (ndarray): Detected segments of this video, of shape
+            (m, 3).
+        gt_segments (ndarray): GT segments of this video, of shape (n, 2).
+        gt_segments_ignore (ndarray): Ignored gt segments of this video,
+            of shape (k, 2). Default: None
+        dist_thr (float): Distance threshold to be considered as matched.
+            Default: 62.5.
+        scale_ranges (list[tuple] | None): Range of segment areas to be
+            evaluated, in the format [(min1, max1), (min2, max2), ...].
+            Default: None.
+
+    Returns:
+        tuple[np.ndarray]: (tp, fp) whose elements are 0 and 1. The shape of
+            each array is (num_scales, m).
+    """
+    assert gt_segments_ignore.shape[0] == 0, (
+        'gt_segments_ignore shape should be 0.')
+    assert scale_ranges is None, 'scale_ranges should set to None.'
+
+    num_dets = det_segments.shape[0]
+    num_gts = gt_segments.shape[0]
+    num_scales = 1
+    # tp and fp are of shape (num_scales, num_dets), each row is tp or fp of
+    # a certain scale
+    tp = np.zeros((num_scales, num_dets), dtype=np.float32)
+    fp = np.zeros((num_scales, num_dets), dtype=np.float32)
+
+    # if there is no gt segments in this video, then all det segments
+    # within area range are false positives
+    if gt_segments.shape[0] == 0:
+        fp[...] = 1
+        return tp, fp
+
+    #iou based method
+    ious = segment_overlaps(det_segments[:, :2], gt_segments)
+
+    #distance based method
+    distances = temporal_distance(det_segments[:, :2], gt_segments)
+    
+    # sort all dets in descending order by scores
+    sort_inds = np.argsort(-det_segments[:, -1])
+    gt_covered = np.zeros(num_gts, dtype=bool)
+    for i in sort_inds:
+        gt_distances = distances[i]
+        sort_gt_inds = np.argsort(gt_distances)
+        for matched_gt in sort_gt_inds:
+            if gt_distances[matched_gt] <= dist_thr:
+                if not gt_covered[matched_gt]:
+                    gt_covered[matched_gt] = True
+                    tp[0, i] = 1
+                    break
+            else:
+                fp[0, i] = 1
+        if fp[0, i] == 0 and tp[0, i] == 0:
+            fp[0, i] = 1
+
+    return tp, fp
 
 def tpfp_distance(det_segments,
                  gt_segments,
@@ -385,7 +450,9 @@ def eval_map(det_results,
 
         # choose proper function according to datasets to compute tp and fp
         if mode in ['anet']:
-            tpfp_func = tpfp_anet
+            print('evaluating with distance function')
+            # tpfp_func = tpfp_anet
+            tpfp_func = tpfp_distance
         else:
             # tpfp_func = tpfp_default
             tpfp_func = tpfp_distance
