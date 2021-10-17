@@ -250,9 +250,6 @@ def tpfp_distance_anet(det_segments,
         fp[...] = 1
         return tp, fp
 
-    #iou based method
-    ious = segment_overlaps(det_segments[:, :2], gt_segments)
-
     #distance based method
     distances = temporal_distance(det_segments[:, :2], gt_segments)
     
