@@ -260,7 +260,7 @@ def tpfp_distance_anet(det_segments,
         gt_distances = distances[i]
         sort_gt_inds = np.argsort(gt_distances)
         for matched_gt in sort_gt_inds:
-            if gt_distances[matched_gt] <= dist_thr:
+            if gt_distances[matched_gt] >= dist_thr:
                 if not gt_covered[matched_gt]:
                     gt_covered[matched_gt] = True
                     tp[0, i] = 1
