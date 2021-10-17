@@ -253,7 +253,7 @@ def tpfp_distance_anet(det_segments,
     #distance based method
     distances = temporal_distance(det_segments[:, :2], gt_segments)
     print(distances)
-    print('distance treshold' - dist_thr)
+    print('distance treshold - ',dist_thr)
     # sort all dets in descending order by scores
     sort_inds = np.argsort(-det_segments[:, -1])
     gt_covered = np.zeros(num_gts, dtype=bool)
