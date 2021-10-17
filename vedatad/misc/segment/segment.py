@@ -179,12 +179,12 @@ def temporal_distance(segments1, segments2, is_aligned=False):
         segments1_midpoints = torch.mean(segments1, dim=1)
         segments2_midpoints = torch.mean(segments2, dim=1)
         abs_distance = torch.abs(segments1_midpoints - segments2_midpoints)
-        abs_distance
+        print(abs_distance)
     else:
         segments1_midpoints = torch.mean(segments1, dim=1)
         segments2_midpoints = torch.mean(segments2, dim=1)
         abs_distance = torch.abs(segments1_midpoints.unsqueeze(1) - segments2_midpoints)
-        abs_distance
+        print(abs_distance)
     if is_numpy:
         abs_distance = abs_distance.numpy()
 
