@@ -251,7 +251,7 @@ def tpfp_distance_anet(det_segments,
         return tp, fp
 
     #distance based method
-    dist_thr = 2.5
+    dist_thr = 1.0
     distances = temporal_distance(det_segments[:, :2], gt_segments)
 
     # sort all dets in descending order by scores
