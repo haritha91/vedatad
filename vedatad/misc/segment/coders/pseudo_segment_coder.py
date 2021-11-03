@@ -13,8 +13,10 @@ class PseudoSegmentCoder(BaseSegmentCoder):
 
     def encode(self, segments, gt_segments):
         """torch.Tensor: return the given ``segments``"""
-        return gt_segments
+        # return gt_segments
+        return encoded_deltas
 
     def decode(self, segments, pred_segments):
         """torch.Tensor: return the given ``pred_segments``"""
-        return pred_segments
+        # return pred_segments
+        return gt_centers
