@@ -42,7 +42,7 @@ def _concat_dataset(cfg, default_args=None):
 
 
 def build_dataset(cfg, default_args=None):
-    print('build dataset!')
+    print('building dataset...')
     from .dataset_wrappers import (ClassBalancedDataset, ConcatDataset,
                                    RepeatDataset)
     if isinstance(cfg, (list, tuple)):
@@ -89,6 +89,7 @@ def build_dataloader(dataset,
     Returns:
         DataLoader: A PyTorch dataloader.
     """
+    print('building dataloaders...')
     rank, world_size = get_dist_info()
     if dist:
         # DistributedGroupSampler will definitely shuffle the data to satisfy

@@ -8,7 +8,7 @@ from vedatad.engines import build_engine
 
 
 def trainval(cfg, distributed, logger):
-    print('assembler trainval method!')
+    print('assembler trainval method initiated.')
 
     for mode in cfg.modes:
         assert mode in ('train', 'val')
@@ -17,6 +17,7 @@ def trainval(cfg, distributed, logger):
     engines = dict()
     find_unused_parameters = cfg.get('find_unused_parameters', False)
     if 'train' in cfg.modes:
+        print('train mode!')
         dataset = build_dataset(cfg.data.train)
 
         dataloaders['train'] = build_dataloader(
@@ -25,6 +26,7 @@ def trainval(cfg, distributed, logger):
             cfg.data.workers_per_gpu,
             dist=distributed,
             seed=cfg.get('seed', None))
+        
         engine = build_engine(cfg.train_engine)
 
         if distributed:
