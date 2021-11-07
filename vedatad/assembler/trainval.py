@@ -72,6 +72,7 @@ def trainval(cfg, distributed, logger):
 
     if 'weights' in cfg:
         looper.load_weights(**cfg.weights)
+        print('weights loaded...')
     if 'train' in cfg.modes:
         if 'optimizer' in cfg:
             looper.load_optimizer(**cfg.optimizer)
