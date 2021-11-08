@@ -36,7 +36,7 @@ class DeltaTransitionCoder(BaseSegmentCoder):
                 ground-truth segments.
 
         Returns:
-            torch.Tensor: segment transition deltas
+            torch.Tensor: segment transition points
         """
 
         assert segments.size(0) == gt_segments.size(0)
