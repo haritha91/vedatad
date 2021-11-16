@@ -1,4 +1,4 @@
-# 1. data
+# 1. data - 10 second transitions
 dataset_type = 'Netball1604Dataset'
 data_root = 'data/netball164-10/'
 img_norm_cfg = dict(
