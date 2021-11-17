@@ -35,7 +35,7 @@ class PointAnchorCriterion(BaseCriterion):
                  num_classes,
                  meshgrid,
                  segment_coder=dict(
-                     typename='DeltaSegmentCoder',
+                     typename='DeltaPointCoder',
                      target_means=(.0, .0),
                      target_stds=(1.0, 1.0)),
                  reg_decoded_segment=False,

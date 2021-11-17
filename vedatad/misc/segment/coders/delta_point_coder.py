@@ -7,7 +7,7 @@ from .base_segment_coder import BaseSegmentCoder
 
 
 @registry.register_module('segment_coder')
-class DeltaSegmentCoder(BaseSegmentCoder):
+class DeltaPointCoder(BaseSegmentCoder):
     """Delta Segment coder.
 
     Following the practice in `R-CNN <https://arxiv.org/abs/1311.2524>`_,
