@@ -151,7 +151,7 @@ train_engine = dict(
             gamma=2.0,
             alpha=0.25,
             loss_weight=1.0),
-        loss_segment=dict(typename='DIoULoss', loss_weight=1.0),
+        loss_segment=dict(typename='PDLoss', loss_weight=1.0),
         train_cfg=dict(
             assigner=dict(
                 typename='MaxIoUAssigner',
