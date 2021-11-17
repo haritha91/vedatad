@@ -30,8 +30,7 @@ def point_distance_loss(pred, target, eps=1e-7):
     c = enclose_interval + eps
 
     #normalized distance 
-    # loss = distance / c
-    loss = distance
+    loss = distance / c
     return loss
 
 
