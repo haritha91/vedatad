@@ -8,11 +8,11 @@ from .base_segment_coder import BaseSegmentCoder
 
 @registry.register_module('segment_coder')
 class DeltaPointCoder(BaseSegmentCoder):
-    """Delta Segment coder.
+    """Delta Point coder.
 
     Following the practice in `R-CNN <https://arxiv.org/abs/1311.2524>`_,
-    this coder encodes segment (start, end) into delta (d_center, d_interval)
-    and decodes delta (d_center, d_interval) back to original segment
+    this coder encodes segment (start, end) into delta (d_center,)
+    and decodes delta (d_center, ) back to original segment
     (start, end).
 
     Args:
