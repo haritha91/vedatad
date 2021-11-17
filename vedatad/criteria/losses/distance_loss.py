@@ -21,16 +21,16 @@ def point_distance_loss(pred, target, eps=1e-7):
 
     pred_center = (pred[:, 0] + pred[:, 1]) * 0.5
     target_center = (target[:, 0] + target[:, 1]) * 0.5
-    distance = abs(target_center - pred_center)
+    distance = (target_center - pred_center)**2
 
     # enclose area
     enclose_start = torch.min(pred[:, 0], target[:, 0])
     enclose_end = torch.max(pred[:, 1], target[:, 1])
     enclose_interval = (enclose_end - enclose_start).clamp(min=0)
-    c = enclose_interval + eps
+    c2 = enclose_interval**2 + eps
 
     #normalized distance 
-    loss = distance / c
+    loss = distance / c2
     return loss
 
 
