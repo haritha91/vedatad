@@ -10,7 +10,7 @@ from .losses import build_loss
 
 
 @registry.register_module('criterion')
-class SegmentAnchorCriterion(BaseCriterion):
+class PointAnchorCriterion(BaseCriterion):
     """Anchor-based head (RPN, RetinaNet, SSD, etc.).
 
     Args:
