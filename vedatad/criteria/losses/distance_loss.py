@@ -9,8 +9,7 @@ from .utils import weighted_loss
 
 @weighted_loss
 def point_distance_loss(pred, target, eps=1e-7):
-    r"""`Implementation of Point distance Loss: Faster and Better
-    Learning for Bounding Box Regression, https://arxiv.org/abs/1911.08287`_.
+    r"""`Implementation of Point distance Loss: for Bounding Box Regression.
     Args:
         pred (Tensor): Predicted segments of format (start, end),
             shape (n, 2).
@@ -31,7 +30,8 @@ def point_distance_loss(pred, target, eps=1e-7):
     c = enclose_interval + eps
 
     #normalized distance 
-    loss = distance / c
+    # loss = distance / c
+    loss = distance
     return loss
 
 
