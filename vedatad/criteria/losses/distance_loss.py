@@ -29,10 +29,10 @@ def point_distance_loss(pred, target, eps=1e-7):
     enclose_interval = (enclose_end - enclose_start).clamp(min=0)
     c2 = enclose_interval**2 + eps
 
-    # #normalized distance 
-    # loss = distance / c2
-    #MSE loss
-    loss = distance
+    #normalized distance 
+    loss = distance / c2
+    # #MSE loss
+    # loss = distance
 
     return loss
 
