@@ -181,8 +181,6 @@ class PointAnchorCriterion(BaseCriterion):
                                     inside_flags)
 
         print('length of segment_targets', len(segment_targets))
-        tensor_sum = segment_targets.sum().item()
-        print('tensor sum - ', tensor_sum)
         print('shape of segment targets [0]', segment_targets[0].shape)
         print(segment_targets)
         print('segment targets[0] - ', segment_targets[0])
@@ -288,6 +286,13 @@ class PointAnchorCriterion(BaseCriterion):
             res = res + (sampling_results_list, )
         for i, r in enumerate(rest_results):  # user-added return values
             rest_results[i] = videos_to_levels(r, num_level_anchors)
+
+        print('get_targets method')
+        print('length of segment_targets', len(segment_targets_list))
+        print('shape of segment targets list [0]', segment_targets_list[0].shape)
+        print(segment_targets_list)
+        print('segment targets[0] - ', segment_targets_list[0])
+
 
         return res + tuple(rest_results)
 
