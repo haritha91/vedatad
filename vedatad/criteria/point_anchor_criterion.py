@@ -181,6 +181,8 @@ class PointAnchorCriterion(BaseCriterion):
                                     inside_flags)
 
         print('length of segment_targets', len(segment_targets))
+        tensor_sum = segment_targets.sum().data[0]
+        print('tensor sum - ', tensor_sum)
         print('shape of segment targets [0]', segment_targets[0].shape)
         print(segment_targets)
         print('segment targets[0] - ', segment_targets[0])
