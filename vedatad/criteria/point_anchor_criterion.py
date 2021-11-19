@@ -180,10 +180,10 @@ class PointAnchorCriterion(BaseCriterion):
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
 
-        print('length of segment_targets', len(segment_targets))
-        print('shape of segment targets [0]', segment_targets[0].shape)
-        print(segment_targets)
-        print('segment targets[0] - ', segment_targets[0])
+        # print('length of segment_targets', len(segment_targets))
+        # print('shape of segment targets [0]', segment_targets[0].shape)
+        # print(segment_targets)
+        # print('segment targets[0] - ', segment_targets[0])
 
         return (labels, label_weights, segment_targets, segment_weights,
                 pos_inds, neg_inds, sampling_result)
@@ -287,11 +287,11 @@ class PointAnchorCriterion(BaseCriterion):
         for i, r in enumerate(rest_results):  # user-added return values
             rest_results[i] = videos_to_levels(r, num_level_anchors)
 
-        print('get_targets method')
-        print('length of segment_targets', len(segment_targets_list))
-        print('shape of segment targets list [0]', segment_targets_list[0].shape)
-        print(segment_targets_list)
-        print('segment targets[0] - ', segment_targets_list[0])
+        # print('get_targets method')
+        # print('length of segment_targets', len(segment_targets_list))
+        # print('shape of segment targets list [0]', segment_targets_list[0].shape)
+        # print(segment_targets_list)
+        # print('segment targets[0] - ', segment_targets_list[0])
 
 
         return res + tuple(rest_results)
@@ -333,9 +333,13 @@ class PointAnchorCriterion(BaseCriterion):
         loss_cls = self.loss_cls(
             cls_score, labels, label_weights, avg_factor=num_total_samples)
         # regression loss
+        print('segment_targets - init - ', segment_targets.shape)
+        print('segment_pred - init - ', segment_pred.shape)
         segment_targets = segment_targets.reshape(-1, 2)
+        print('segment_targets - reshape - ', segment_targets.shape)
         segment_weights = segment_weights.reshape(-1, 2)
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
+        print('segment_pred - reshape - ', segment_pred.shape)
         if self.reg_decoded_segment:
             anchors = anchors.reshape(-1, 2)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
