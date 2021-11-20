@@ -344,6 +344,7 @@ class PointAnchorCriterion(BaseCriterion):
             print('anchors init - ', anchors.shape)
             anchors = anchors.reshape(-1, 2)
             print('anchors reshape - ', anchors.shape)
+            print('segment_pred before decode - ', segment_pred.shape)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
             print('segment_pred decode - ', segment_pred.shape)
         loss_segment = self.loss_segment(
