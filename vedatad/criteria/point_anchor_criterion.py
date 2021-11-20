@@ -341,8 +341,11 @@ class PointAnchorCriterion(BaseCriterion):
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
         print('segment_pred - reshape - ', segment_pred.shape)
         if self.reg_decoded_segment:
+            print('anchors init - ', anchors.shape)
             anchors = anchors.reshape(-1, 2)
+            print('anchors reshape - ', anchors.shape)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
+            print('segment_pred decode - ', segment_pred.shape)
         loss_segment = self.loss_segment(
             segment_pred,
             segment_targets,
