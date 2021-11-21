@@ -71,11 +71,11 @@ class RetinaHead(AnchorHead):
             self.num_anchors * self.cls_out_channels,
             3,
             padding=1)
-        self.retina_reg = nn.Conv1d(
-            self.feat_channels, self.num_anchors * 2, 3, padding=1)
-        # # Single point prediction
         # self.retina_reg = nn.Conv1d(
-        #     self.feat_channels, self.num_anchors, 3, padding=1)
+        #     self.feat_channels, self.num_anchors * 2, 3, padding=1)
+        # Single point prediction
+        self.retina_reg = nn.Conv1d(
+            self.feat_channels, self.num_anchors, 3, padding=1)
 
     def init_weights(self):
         """Initialize weights of the head."""
