@@ -39,7 +39,7 @@ class DeltaPointCoder(BaseSegmentCoder):
         Returns:
             torch.Tensor: transformation point deltas
         """
-
+        print('delta_point encoder')
         assert segments.size(0) == gt_segments.size(0)
         assert segments.size(-1) == gt_segments.size(-1) == 2
         encoded_segments = segment2delta(segments, gt_segments, self.means,
@@ -58,7 +58,7 @@ class DeltaPointCoder(BaseSegmentCoder):
         Returns:
             torch.Tensor: Decoded segments.
         """
-
+        print('delta_point decoder')
         assert pred_segments.size(0) == segments.size(0)
         decoded_segments = delta2point(segments, pred_segments, self.means,
                                          self.stds, max_t)
