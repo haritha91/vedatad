@@ -29,7 +29,7 @@ class DeltaPointCoder(BaseSegmentCoder):
 
     def encode(self, segments, gt_segments):
         """Get segment regression transformation deltas that can be used to
-        transform the ``segments`` into the ``gt_segments``.
+        transform the ``segments`` into the ``gt_points``.
 
         Args:
             segments (torch.Tensor): Source segments, e.g., object proposals.
@@ -37,7 +37,7 @@ class DeltaPointCoder(BaseSegmentCoder):
                 ground-truth segments.
 
         Returns:
-            torch.Tensor: segment transformation deltas
+            torch.Tensor: transformation point deltas
         """
 
         assert segments.size(0) == gt_segments.size(0)
@@ -60,7 +60,7 @@ class DeltaPointCoder(BaseSegmentCoder):
         """
 
         assert pred_segments.size(0) == segments.size(0)
-        decoded_segments = delta2segment(segments, pred_segments, self.means,
+        decoded_segments = delta2point(segments, pred_segments, self.means,
                                          self.stds, max_t)
 
         return decoded_segments
@@ -71,7 +71,7 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
 
     We usually compute the deltas of center, interval of proposals w.r.t ground
     truth segments to get regression target.
-    This is the inverse function of :func:`delta2segment`.
+    This is the inverse function of :func:`delta2point`.
 
     Args:
         proposals (Tensor): Segments to be transformed, shape (N, ..., 2)
@@ -81,8 +81,7 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
             coordinates
 
     Returns:
-        Tensor: deltas with shape (N, 2), where columns represent d_center,
-            d_interval
+        Tensor: deltas with shape (N, ), where columns represent d_center,
     """
     assert proposals.size() == gt.size()
 
@@ -93,11 +92,9 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     p_interval = proposals[..., 1] - proposals[..., 0]
 
     g_center = (gt[..., 0] + gt[..., 1]) * 0.5
-    g_interval = gt[..., 1] - gt[..., 0]
 
     d_center = (g_center - p_center) / p_interval
-    d_interval = torch.log(g_interval / p_interval)
-    deltas = torch.stack([d_center, d_interval], dim=-1)
+    deltas = torch.stack([d_center], dim=-1)
 
     means = deltas.new_tensor(means).unsqueeze(0)
     stds = deltas.new_tensor(stds).unsqueeze(0)
@@ -106,8 +103,8 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     return deltas
 
 
-def delta2segment(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
-    """Apply deltas to shift/scale base segments.
+def delta2point(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
+    """Apply deltas to shift/scale base points.
 
     Typically the rois are anchor or proposed segments and the deltas are
     network outputs used to shift/scale those segments.
@@ -124,8 +121,7 @@ def delta2segment(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
         max_t (int): Maximum time for segments. specifies T
 
     Returns:
-        Tensor: Segments with shape (N, 2), where columns represent
-            start, end.
+        Tensor: Points with shape (N)
 
     References:
         .. [1] https://arxiv.org/abs/1311.2524
@@ -135,35 +131,39 @@ def delta2segment(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
         >>>                      [ 0.,  1.],
         >>>                      [ 0.,  1.],
         >>>                      [ 5., 5.]])
-        >>> deltas = torch.Tensor([[  0.,   0.],
-        >>>                        [  1.,   1.],
-        >>>                        [  0.,   2.],
-        >>>                        [ 0.7, -0.5]])
-        >>> delta2segment(rois, deltas, max_t=32)
-        tensor([[0.0000, 1.0000],
-                [0.1409, 2.8591],
-                [0.0000, 4.1945],
-                [5.0000, 5.0000]])
+        >>> deltas = torch.Tensor([[  0.],
+        >>>                        [  1.],
+        >>>                        [  0.],
+        >>>                        [ 0.7]])
+        >>> delta2point(rois, deltas, max_t=32)
+        tensor([[0.0000],
+                [0.1409],
+                [0.0000],
+                [5.0000]])
     """
-    means = deltas.new_tensor(means).repeat(1, deltas.size(1) // 2)
-    stds = deltas.new_tensor(stds).repeat(1, deltas.size(1) // 2)
+    means = deltas.new_tensor(means).repeat(1, deltas.size(0) // 2)
+    stds = deltas.new_tensor(stds).repeat(1, deltas.size(0) // 2)
     denorm_deltas = deltas * stds + means
-    d_center = denorm_deltas[:, 0::2]
-    d_interval = denorm_deltas[:, 1::2]
+    d_center = denorm_deltas[:, 0:1]
+
     # Compute center of each roi
     p_center = ((rois[:, 0] + rois[:, 1]) *
                 0.5).unsqueeze(1).expand_as(d_center)
+
     # Compute interval of each roi
-    p_interval = (rois[:, 1] - rois[:, 0]).unsqueeze(1).expand_as(d_interval)
-    # Use exp(network energy) to enlarge/shrink each roi
-    g_interval = p_interval * d_interval.exp()
-    # Use network energy to shift the center of each roi
-    g_center = p_center + p_interval * d_center
+    p_interval = (rois[:, 1] - rois[:, 0]).unsqueeze(1).expand_as(d_center)
+    g_interval = p_interval
+
+    # Use delta to shift the center of each roi
+    g_center = p_center +  d_center
+
     # Convert center-xy/width/height to top-left, bottom-right
     start = g_center - g_interval * 0.5
     end = g_center + g_interval * 0.5
     if max_t is not None:
         start = start.clamp(min=0, max=max_t)
         end = end.clamp(min=0, max=max_t)
-    segments = torch.stack([start, end], dim=-1).view_as(deltas)
+    # segments = torch.stack([start, end], dim=-1).view_as(deltas) #view as is deltas in original
+    segments = torch.stack([start, end], dim=-1)
+
     return segments
