@@ -59,6 +59,8 @@ class DeltaPointCoder(BaseSegmentCoder):
             torch.Tensor: Decoded segments.
         """
         print('delta_point decoder')
+        print('pred_segments - ', pred_segments.shape)
+        print('segments - ', segments.shape)
         assert pred_segments.size(0) == segments.size(0)
         decoded_segments = delta2point(segments, pred_segments, self.means,
                                          self.stds, max_t)

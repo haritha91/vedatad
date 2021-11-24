@@ -150,7 +150,6 @@ class PointAnchorCriterion(BaseCriterion):
                     sampling_result.pos_segments,
                     sampling_result.pos_gt_segments)
             else:
-                print('before encode method - else')
                 pos_segment_targets = sampling_result.pos_gt_segments
             segment_targets[pos_inds, :] = pos_segment_targets
             segment_weights[pos_inds, :] = 1.0
