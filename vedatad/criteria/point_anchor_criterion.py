@@ -122,7 +122,7 @@ class PointAnchorCriterion(BaseCriterion):
 
         #print inputs 
         print('gt_segments shape', gt_segments.shape)
-        
+
 
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
@@ -342,7 +342,13 @@ class PointAnchorCriterion(BaseCriterion):
         # regression loss
         print('segment_targets - init - ', segment_targets.shape)
         print('segment_pred - init - ', segment_pred.shape)
-        segment_targets = segment_targets.reshape(-1, 2)
+
+        ####
+        segment_targets = torch.mean(segment_targets, dim=2)
+        segment_targets = segment_targets.reshape(-1, 1)
+        ####
+
+        # segment_targets = segment_targets.reshape(-1, 2)
         print('segment_targets - reshape - ', segment_targets.shape)
         segment_weights = segment_weights.reshape(-1, 2)
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
