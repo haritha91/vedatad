@@ -145,6 +145,7 @@ class PointAnchorCriterion(BaseCriterion):
         neg_inds = sampling_result.neg_inds
         if len(pos_inds) > 0:
             if not self.reg_decoded_segment:
+                print('before encode method')
                 pos_segment_targets = self.segment_coder.encode(
                     sampling_result.pos_segments,
                     sampling_result.pos_gt_segments)
