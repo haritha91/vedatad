@@ -119,6 +119,11 @@ class PointAnchorCriterion(BaseCriterion):
                 num_total_pos (int): Number of positive samples in all videos
                 num_total_neg (int): Number of negative samples in all videos
         """
+
+        #print inputs 
+        print('gt_segments shape', gt_segments.shape)
+        
+
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
                                            self.train_cfg.allowed_border)
