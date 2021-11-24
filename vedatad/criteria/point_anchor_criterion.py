@@ -182,6 +182,7 @@ class PointAnchorCriterion(BaseCriterion):
                                     inside_flags)
 
         print('length of segment_targets', len(segment_targets))
+        print('shape of segment targets - ', segment_targets.shape)
         print('shape of segment targets [0]', segment_targets[0].shape)
         print(segment_targets)
         print('segment targets[0] - ', segment_targets[0])
