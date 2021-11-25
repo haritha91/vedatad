@@ -148,7 +148,7 @@ def delta2point(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
     means = deltas.new_tensor(means).repeat(1, deltas.size(0) // 2)
     stds = deltas.new_tensor(stds).repeat(1, deltas.size(0) // 2)
     # denorm_deltas = deltas * stds + means
-    denorm_deltas = deltas * stds + means
+    denorm_deltas = deltas
 
     d_center = denorm_deltas[:, 0:1]
 
