@@ -72,7 +72,7 @@ data = dict(
 num_classes = 4
 strides = [8, 16, 32, 64, 128]
 use_sigmoid = True
-scales_per_octave = 5
+scales_per_octave = 1 #5
 octave_base_scale = 2
 num_anchors = scales_per_octave
 
