@@ -60,9 +60,9 @@ class DeltaPointCoder(BaseSegmentCoder):
         """
         print('delta_point decoder')
         print('pred_segments - ', pred_segments.shape)
-        print('segments - ', segments.shape)
+        # print('segments - ', segments.shape)
         print('pred_segments - ', pred_segments)
-        print('segments - ', segments)
+        # print('segments - ', segments)
         assert pred_segments.size(0) == segments.size(0)
         decoded_segments = delta2point(segments, pred_segments, self.means,
                                          self.stds, max_t)

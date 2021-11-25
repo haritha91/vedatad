@@ -345,7 +345,9 @@ class PointAnchorCriterion(BaseCriterion):
 
         ####
         segment_targets = torch.mean(segment_targets, dim=2)
+        print('segment_targets - mean - ', segment_targets.shape)
         segment_targets = segment_targets.reshape(-1, 1)
+        print('segment_targets - reshape - ', segment_targets.shape)
         ####
 
         # segment_targets = segment_targets.reshape(-1, 2)
