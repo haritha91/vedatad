@@ -62,7 +62,7 @@ class PDLoss(nn.Module):
             # TODO: remove this in the future
             # reduce the weight of shape (n, 4) to (n,) to match the
             # giou_loss of shape (n,)
-            assert weight.shape == pred.shape
+            # assert weight.shape == pred.shape
             weight = weight.mean(-1)
         loss = self.loss_weight * point_distance_loss(
             pred,
