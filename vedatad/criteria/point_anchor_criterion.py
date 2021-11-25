@@ -120,9 +120,6 @@ class PointAnchorCriterion(BaseCriterion):
                 num_total_neg (int): Number of negative samples in all videos
         """
 
-        #print inputs 
-        print('gt_segments shape', gt_segments.shape)
-
 
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
@@ -186,11 +183,11 @@ class PointAnchorCriterion(BaseCriterion):
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
 
-        print('length of segment_targets', len(segment_targets))
-        print('shape of segment targets - ', segment_targets.shape)
-        print('shape of segment targets [0]', segment_targets[0].shape)
-        print(segment_targets)
-        print('segment targets[0] - ', segment_targets[0])
+        # print('length of segment_targets', len(segment_targets))
+        # print('shape of segment targets - ', segment_targets.shape)
+        # print('shape of segment targets [0]', segment_targets[0].shape)
+        # print(segment_targets)
+        # print('segment targets[0] - ', segment_targets[0])
 
         return (labels, label_weights, segment_targets, segment_weights,
                 pos_inds, neg_inds, sampling_result)
@@ -339,6 +336,7 @@ class PointAnchorCriterion(BaseCriterion):
                                                        self.cls_out_channels)
         loss_cls = self.loss_cls(
             cls_score, labels, label_weights, avg_factor=num_total_samples)
+
         # regression loss
         print('segment_targets - init - ', segment_targets.shape)
         print('segment_pred - init - ', segment_pred.shape)
@@ -346,7 +344,7 @@ class PointAnchorCriterion(BaseCriterion):
         ####
         segment_targets = torch.mean(segment_targets, dim=2)
         print('segment_targets - mean - ', segment_targets.shape)
-        segment_targets = segment_targets.reshape(-1, 1)
+        segment_targets = segment_targets.reshape(-1, 2)
         print('segment_targets - reshape - ', segment_targets.shape)
         ####
 
