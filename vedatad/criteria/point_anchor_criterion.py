@@ -349,12 +349,12 @@ class PointAnchorCriterion(BaseCriterion):
         ####
 
         # segment_targets = segment_targets.reshape(-1, 2)
-        print('segment_targets - reshape - ', segment_targets.shape)
         segment_weights = segment_weights.reshape(-1, 2)
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
         print('segment_pred - reshape - ', segment_pred.shape)
         if self.reg_decoded_segment:
             print('anchors init - ', anchors.shape)
+            anchors = torch.mean(anchors, dim=2)
             anchors = anchors.reshape(-1, 2)
             print('anchors reshape - ', anchors.shape)
             print('segment_pred before decode - ', segment_pred.shape)
