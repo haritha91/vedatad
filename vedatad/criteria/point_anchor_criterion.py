@@ -120,8 +120,6 @@ class PointAnchorCriterion(BaseCriterion):
                 num_total_neg (int): Number of negative samples in all videos
         """
 
-        print('flat_anchors - ', flat_anchors)
-        print('flat anchors shape - ', flat_anchors.shape)
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
                                            self.train_cfg.allowed_border)
