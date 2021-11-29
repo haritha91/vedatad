@@ -363,12 +363,16 @@ class PointAnchorCriterion(BaseCriterion):
         segment_pred = segment_pred.permute(0, 2, 1)
         segment_pred = torch.flatten(segment_pred, 0, 1)
         print('segment_pred - flatten - ', segment_pred.shape)
+
+        segment_weights = torch.mean(segment_weights, dim=2).unsqueeze(2) #(2, 96, 1)
+        print('segment_weights - mean - ', segment_weights.shape)
+        segment_weights = torch.flatten(segment_weights, 0, 1) #(192, 1)
+        print('segment_weights - flatten - ', segment_weights.shape)
+
         # ####
         # segment_targets = segment_targets.reshape(-1, 2)
-
-        segment_weights = segment_weights.reshape(-1, 2)
-        print ('segment_weights - reshape - ', segment_weights.shape)
-        
+        # segment_weights = segment_weights.reshape(-1, 2)
+        # print ('segment_weights - reshape - ', segment_weights.shape)
         # segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
         
 
