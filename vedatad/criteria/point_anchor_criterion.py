@@ -337,16 +337,6 @@ class PointAnchorCriterion(BaseCriterion):
             cls_score, labels, label_weights, avg_factor=num_total_samples)
 
         # regression loss
-        print('segment_targets - init - ', segment_targets.shape)
-        print('segment_pred - init - ', segment_pred.shape)
-
-        # ####
-        segment_targets = torch.mean(segment_targets, dim=2) #(2, 480, 2)
-        print('segment_targets - mean - ', segment_targets.shape)
-        # segment_targets = segment_targets.reshape(-1, 2)
-        # print('segment_targets - reshape - ', segment_targets.shape)
-        # ####
-
         # #targets
         # (2, 480, 2)
         # (960, 2)
@@ -360,10 +350,28 @@ class PointAnchorCriterion(BaseCriterion):
         # (2, 1*5, 96)
         # (480, 2)
 
+        print('segment_targets - init - ', segment_targets.shape)
+        print('segment_pred - init - ', segment_pred.shape)
+        print ('segment_weights - init - ', segment_weights.shape)
+
+        # ####
+        segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 96, 1)
+        print('segment_targets - mean - ', segment_targets.shape)
+        segment_targets = torch.flatten(segment_targets, 0, 1) #(192, 1)
+        print('segment_targets - flatten - ', segment_targets.shape)
+
+        segment_pred = segment_pred.permute(0, 2, 1)
+        segment_pred = torch.flatten(segment_pred, 0, 1)
+        print('segment_pred - flatten - ', segment_pred.shape)
+        # ####
         # segment_targets = segment_targets.reshape(-1, 2)
+
         segment_weights = segment_weights.reshape(-1, 2)
-        segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
-        print('segment_pred - reshape - ', segment_pred.shape)
+        print ('segment_weights - reshape - ', segment_weights.shape)
+        
+        # segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
+        
+
         if self.reg_decoded_segment:
             print('anchors init - ', anchors.shape)
             anchors = torch.mean(anchors, dim=2)
