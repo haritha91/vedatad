@@ -18,10 +18,10 @@ def point_distance_loss(pred, target, eps=1e-7):
     Return:
         Tensor: Loss tensor.
     """
-    print('pred_center - ', pred.shape) #(48, 1)
-    print('target_center - ', target.shape) #(48, 1)
+    print('pred - ', pred.shape) #(48, 1)
+    print('target - ', target.shape) #(48, 1)
     
-    distance = (target_center - pred_center)**2
+    distance = (pred - target)**2
 
     # # enclose area
     # enclose_start = torch.min(pred[:, 0], target[:, 0])
