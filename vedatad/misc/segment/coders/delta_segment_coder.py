@@ -65,7 +65,7 @@ class DeltaSegmentCoder(BaseSegmentCoder):
 
         return decoded_segments
 
-
+#encode
 def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     """Compute deltas of proposals w.r.t. gt.
 
@@ -105,7 +105,7 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
 
     return deltas
 
-
+#decode
 def delta2segment(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
     """Apply deltas to shift/scale base segments.
 

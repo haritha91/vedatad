@@ -69,7 +69,7 @@ class DeltaPointCoder(BaseSegmentCoder):
 
         return decoded_segments
 
-
+#encode
 def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     """Compute deltas of proposals w.r.t. gt.
 
@@ -106,18 +106,18 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
 
     return deltas
 
-
-def delta2point(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
-    """Apply deltas to shift/scale base points.
+#decode
+def delta2point(rois, deltas, means=(0.), stds=(1.), max_t=None):
+    """Apply deltas to shift base points.
 
     Typically the rois are anchor or proposed segments and the deltas are
-    network outputs used to shift/scale those segments.
+    network outputs used to shift those segments.
     This is the inverse function of :func:`segment2delta`.
 
     Args:
-        rois (Tensor): Segments to be transformed. Has shape (N, 2)
+        rois (Tensor): Segments to be transformed. Has shape (N, 1)
         deltas (Tensor): Encoded offsets with respect to each roi.
-            Has shape (N, 2 * num_classes). Note N = num_anchors * T when
+            Has shape (N, 1 * num_classes). Note N = num_anchors * T when
             rois is a grid of anchors. Offset encoding follows [1]_.
         means (Sequence[float]): Denormalizing means for delta coordinates
         stds (Sequence[float]): Denormalizing standard deviation for delta
@@ -145,10 +145,17 @@ def delta2point(rois, deltas, means=(0., 0.), stds=(1., 1.), max_t=None):
                 [0.0000],
                 [5.0000]])
     """
+    print('delta2point method')
+    print('deltas - ', deltas.shape)
+    print('rois - ', rois.shape)
+
     means = deltas.new_tensor(means).repeat(1, deltas.size(0) // 2)
     stds = deltas.new_tensor(stds).repeat(1, deltas.size(0) // 2)
-    # denorm_deltas = deltas * stds + means
-    denorm_deltas = deltas
+    denorm_deltas = deltas * stds + means
+    # denorm_deltas = deltas
+    print('means shape - ', means.shape)
+    print('stds shape - ', stds.shape)
+    print('denorm_deltas - shape - ', denorm_deltas.shape)
 
     d_center = denorm_deltas[:, 0:1]
 
