@@ -149,6 +149,10 @@ def delta2point(rois, deltas, means=(0.), stds=(1.), max_t=None):
     print('deltas - ', deltas.shape)
     print('rois - ', rois.shape)
 
+    print('means raw shape - ', means.shape)
+    print('stds  raw shape - ', stds.shape)
+
+
     means = deltas.new_tensor(means).repeat(1, deltas.size(0) // 2)
     stds = deltas.new_tensor(stds).repeat(1, deltas.size(0) // 2)
     denorm_deltas = deltas * stds + means
