@@ -159,26 +159,14 @@ def delta2point(rois, deltas, means=(0.), stds=(1.), max_t=None):
     print('stds shape - ', stds.shape)
     print('denorm_deltas - shape - ', denorm_deltas.shape)
 
-    d_center = denorm_deltas[:, 0:1]
-
-    # Compute center of each roi
-    p_center = ((rois[:, 0] + rois[:, 1]) *
-                0.5).unsqueeze(1).expand_as(d_center)
-
-    # Compute interval of each roi
-    p_interval = (rois[:, 1] - rois[:, 0]).unsqueeze(1).expand_as(d_center)
-    g_interval = p_interval
-
     # Use delta to shift the center of each roi
-    g_center = p_center +  d_center
+    point = rois +  denorm_deltas
 
-    # Convert center-xy/width/height to top-left, bottom-right
-    start = g_center - g_interval * 0.5
-    end = g_center + g_interval * 0.5
+    print('point - ', point.shape)
+
     if max_t is not None:
-        start = start.clamp(min=0, max=max_t)
-        end = end.clamp(min=0, max=max_t)
-    # segments = torch.stack([start, end], dim=-1).view_as(deltas) #view as is deltas in original
-    segments = torch.stack([start, end], dim=-1)
+        point = start.clamp(min=0, max=max_t)
+    points = torch.stack([point], dim=-1).view_as(deltas) #view as is deltas in original
 
-    return segments
+    print('points - ', points.shape)
+    return points
