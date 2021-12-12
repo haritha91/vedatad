@@ -119,13 +119,13 @@ class SegmentAnchorCriterion(BaseCriterion):
                 num_total_pos (int): Number of positive samples in all videos
                 num_total_neg (int): Number of negative samples in all videos
         """
-        print('_get_targets_single')
-        print('flat_anchors shape- ', flat_anchors.shape)
-        print('flat_anchors - ', flat_anchors)
-        print('gt_segments shape', gt_segments.shape)
-        print('gt_segments - ', gt_segments)
-        print('gt_labels shape - ', gt_labels.shape)
-        print('gt_labels - ', gt_labels)
+        # print('_get_targets_single')
+        # print('flat_anchors shape- ', flat_anchors.shape)
+        # print('flat_anchors - ', flat_anchors)
+        # print('gt_segments shape', gt_segments.shape)
+        # print('gt_segments - ', gt_segments)
+        # print('gt_labels shape - ', gt_labels.shape)
+        # print('gt_labels - ', gt_labels)
 
 
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
@@ -188,6 +188,15 @@ class SegmentAnchorCriterion(BaseCriterion):
                                     inside_flags)
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
+
+        print('segment targets shape- ', segment_targets.shape)
+        print('segment targets - ', segment_targets)
+        print('segment weights shape', segment_weights.shape)
+        print('segment weights - ', segment_weights)
+        print('labels shape - ', labels.shape)
+        print('labels - ', labels)
+
+
 
         return (labels, label_weights, segment_targets, segment_weights,
                 pos_inds, neg_inds, sampling_result)
