@@ -332,19 +332,40 @@ class SegmentAnchorCriterion(BaseCriterion):
             dict[str, Tensor]: A dictionary of loss components.
         """
         # classification loss
+        print('classification loss')
+        print('labels shape - ', labels.shape)
+        print('label weights - ', label_weights.shape)
+        print('class score - ', cls_score.shape)
+        
         labels = labels.reshape(-1)
         label_weights = label_weights.reshape(-1)
         cls_score = cls_score.permute(0, 2, 1).reshape(-1,
                                                        self.cls_out_channels)
+        print('mod labels shape - ', labels.shape)
+        print('mod label weights - ', label_weights.shape)
+        print('mod class score - ', cls_score.shape)
+        
         loss_cls = self.loss_cls(
             cls_score, labels, label_weights, avg_factor=num_total_samples)
+
+        
         # regression loss
+        print('Regression loss')
+        print('segment targets shape - ', segment_targets.shape)
+        print('segment weights shape - ', segment_weights.shape)
+        print('segment preds shape - ', segment_pred.shape)
+
         segment_targets = segment_targets.reshape(-1, 2)
         segment_weights = segment_weights.reshape(-1, 2)
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
         if self.reg_decoded_segment:
             anchors = anchors.reshape(-1, 2)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
+
+        print('mod segment targets shape - ', segment_targets.shape)
+        print('mod segment weights shape - ', segment_weights.shape)
+        print('mod segment preds shape - ', segment_pred.shape)
+
         loss_segment = self.loss_segment(
             segment_pred,
             segment_targets,
