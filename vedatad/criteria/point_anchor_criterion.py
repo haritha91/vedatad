@@ -349,7 +349,7 @@ class PointAnchorCriterion(BaseCriterion):
         # #pred
         # (2, 1*5, 96)
         # (480, 2)
-
+        print('regression loss - point')
         print('segment_targets - init - ', segment_targets.shape)
         print('segment_pred - init - ', segment_pred.shape)
         print ('segment_weights - init - ', segment_weights.shape)
@@ -383,7 +383,13 @@ class PointAnchorCriterion(BaseCriterion):
             print('anchors flatten - ', anchors.shape)
             print('segment_pred before decode - ', segment_pred.shape)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
-            print('segment_pred decode - ', segment_pred.shape)
+            print('segment_pred after decode - ', segment_pred.shape)
+
+        print('segment_targets - fin - ', segment_targets.shape)
+        print('segment_pred - fin - ', segment_pred.shape)
+        print ('segment_weights - fin - ', segment_weights.shape)
+
+
         loss_segment = self.loss_segment(
             segment_pred,
             segment_targets,
