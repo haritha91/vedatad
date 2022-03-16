@@ -358,6 +358,7 @@ class SegmentAnchorCriterion(BaseCriterion):
         segment_targets = segment_targets.reshape(-1, 2)
         segment_weights = segment_weights.reshape(-1, 2)
         segment_pred = segment_pred.permute(0, 2, 1).reshape(-1, 2)
+        print('segment preds permute shape - ', segment_pred.shape)
         if self.reg_decoded_segment:
             anchors = anchors.reshape(-1, 2)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
