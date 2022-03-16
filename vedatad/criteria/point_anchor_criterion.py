@@ -344,32 +344,32 @@ class PointAnchorCriterion(BaseCriterion):
         # (2, 480, 2)
         # (960, 2)
 
-        # #pred
+        # #pred - 2 point
         # (2, 10, 96)
         # (2, 2*5, 96)
         # (960,2)
 
-        # #pred
+        # #pred - single point
         # (2, 1*5, 96)
-        # (480, 2)
+        # (960, 1)
         print('regression loss - point')
-        print('segment_targets - init - ', segment_targets.shape)
-        print('segment_pred - init - ', segment_pred.shape)
-        print ('segment_weights - init - ', segment_weights.shape)
+        print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
+        print('segment_pred - init - ', segment_pred.shape) # (2, 5, 96)
+        print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
 
         # ####
-        segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 96, 1)
+        segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 480, 1)
         print('segment_targets - mean - ', segment_targets.shape)
-        segment_targets = torch.flatten(segment_targets, 0, 1) #(192, 1)
+        segment_targets = torch.flatten(segment_targets, 0, 1) #(960, 1)
         print('segment_targets - flatten - ', segment_targets.shape)
 
-        segment_pred = segment_pred.permute(0, 2, 1)
-        segment_pred = torch.flatten(segment_pred, 0, 1)
-        print('segment_pred - flatten - ', segment_pred.shape)
+        segment_pred = segment_pred.permute(0, 2, 1) # (2, 96, 5)
+        segment_pred = torch.flatten(segment_pred, 0, 2).unsqueeze(1)
+        print('segment_pred - flatten - ', segment_pred.shape) # (960, 1)
 
-        segment_weights = torch.mean(segment_weights, dim=2).unsqueeze(2) #(2, 96, 1)
+        segment_weights = torch.mean(segment_weights, dim=2).unsqueeze(2) #(2, 480, 1)
         print('segment_weights - mean - ', segment_weights.shape)
-        segment_weights = torch.flatten(segment_weights, 0, 1) #(192, 1)
+        segment_weights = torch.flatten(segment_weights, 0, 1) #(960, 1)
         print('segment_weights - flatten - ', segment_weights.shape)
 
         # ####
