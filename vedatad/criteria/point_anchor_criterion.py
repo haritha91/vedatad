@@ -182,8 +182,11 @@ class PointAnchorCriterion(BaseCriterion):
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
 
-        # print('length of segment_targets', len(segment_targets))
-        # print('shape of segment targets - ', segment_targets.shape)
+        print('shape of segment targets - ', segment_targets.shape)
+
+        print('segment weights shape', segment_weights.shape)
+        print('labels shape - ', labels.shape)
+
         # print('shape of segment targets [0]', segment_targets[0].shape)
         # print(segment_targets)
         # print('segment targets[0] - ', segment_targets[0])
