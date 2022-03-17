@@ -18,9 +18,14 @@ def point_distance_loss(pred, target, eps=1e-7):
     Return:
         Tensor: Loss tensor.
     """
+    print('point_distance_loss')
     print('pred - ', pred.shape) #(48, 1)
     print('target - ', target.shape) #(48, 1)
-    
+
+    print('pred - ', pred) #(48, 1)
+    print('target - ', target) #(48, 1)
+
+
     distance = (pred - target)**2
 
     # # enclose area
