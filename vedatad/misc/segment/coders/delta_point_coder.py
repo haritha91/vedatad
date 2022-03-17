@@ -89,6 +89,23 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     """
     assert proposals.size() == gt.size()
 
+    # ## delta point approach
+    # proposals = proposals.float()
+    # gt = gt.float()
+
+    # p_center = (proposals[..., 0] + proposals[..., 1]) * 0.5
+    # p_interval = proposals[..., 1] - proposals[..., 0]
+
+    # g_center = (gt[..., 0] + gt[..., 1]) * 0.5
+
+    # d_center = (g_center - p_center) / p_interval
+    # deltas = torch.stack([d_center], dim=-1)
+
+    # means = deltas.new_tensor(means).unsqueeze(0)
+    # stds = deltas.new_tensor(stds).unsqueeze(0)
+    # deltas = deltas.sub_(means).div_(stds)
+    # ######
+
     proposals = proposals.float()
     gt = gt.float()
 
@@ -96,13 +113,16 @@ def segment2delta(proposals, gt, means=(0., 0.), stds=(1., 1.)):
     p_interval = proposals[..., 1] - proposals[..., 0]
 
     g_center = (gt[..., 0] + gt[..., 1]) * 0.5
+    g_interval = gt[..., 1] - gt[..., 0]
 
     d_center = (g_center - p_center) / p_interval
-    deltas = torch.stack([d_center], dim=-1)
+    d_interval = torch.log(g_interval / p_interval)
+    deltas = torch.stack([d_center, d_interval], dim=-1)
 
     means = deltas.new_tensor(means).unsqueeze(0)
     stds = deltas.new_tensor(stds).unsqueeze(0)
     deltas = deltas.sub_(means).div_(stds)
+
 
     return deltas
 
