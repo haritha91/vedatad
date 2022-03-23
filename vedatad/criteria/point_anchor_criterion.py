@@ -380,19 +380,20 @@ class PointAnchorCriterion(BaseCriterion):
         
 
         if self.reg_decoded_segment:
-            print('anchors init - ', anchors.shape) #(2,480,2)
+            print('reg_decoded_segment')
+            # print('anchors init - ', anchors.shape) #(2,480,2)
             anchors = torch.mean(anchors, dim=2).unsqueeze(2) #(2,480,1)
             anchors = torch.flatten(anchors, 0, 1) #(960,1)
-            print('anchors flatten - ', anchors.shape)
-            print('segment_pred before decode - ', segment_pred.shape)
+            # print('anchors flatten - ', anchors.shape)
+            # print('segment_pred before decode - ', segment_pred.shape)
             # print('segment_pred before decode - ', segment_pred)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
-            print('segment_pred after decode - ', segment_pred.shape)
+            # print('segment_pred after decode - ', segment_pred.shape)
             # print('segment_pred after decode - ', segment_pred)
 
-        print('segment_targets - fin - ', segment_targets.shape)
-        print('segment_pred - fin - ', segment_pred.shape)
-        print ('segment_weights - fin - ', segment_weights.shape)
+        # print('segment_targets - fin - ', segment_targets.shape)
+        # print('segment_pred - fin - ', segment_pred.shape)
+        # print ('segment_weights - fin - ', segment_weights.shape)
 
 
         loss_segment = self.loss_segment(
