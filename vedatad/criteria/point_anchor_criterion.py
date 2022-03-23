@@ -385,8 +385,10 @@ class PointAnchorCriterion(BaseCriterion):
             anchors = torch.flatten(anchors, 0, 1) #(960,1)
             print('anchors flatten - ', anchors.shape)
             print('segment_pred before decode - ', segment_pred.shape)
+            print('segment_pred before decode - ', segment_pred)
             segment_pred = self.segment_coder.decode(anchors, segment_pred)
             print('segment_pred after decode - ', segment_pred.shape)
+            print('segment_pred after decode - ', segment_pred)
 
         print('segment_targets - fin - ', segment_targets.shape)
         print('segment_pred - fin - ', segment_pred.shape)
