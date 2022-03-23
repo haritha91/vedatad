@@ -182,10 +182,10 @@ class PointAnchorCriterion(BaseCriterion):
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
 
-        print('shape of segment targets - ', segment_targets.shape)
+        # print('shape of segment targets - ', segment_targets.shape)
 
-        print('segment weights shape', segment_weights.shape)
-        print('labels shape - ', labels.shape)
+        # print('segment weights shape', segment_weights.shape)
+        # print('labels shape - ', labels.shape)
 
         # print('shape of segment targets [0]', segment_targets[0].shape)
         # print(segment_targets)
@@ -353,24 +353,24 @@ class PointAnchorCriterion(BaseCriterion):
         # (2, 1*5, 96)
         # (960, 1)
         print('regression loss - point')
-        print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
-        print('segment_pred - init - ', segment_pred.shape) # (2, 5, 96)
-        print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
+        # print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
+        # print('segment_pred - init - ', segment_pred.shape) # (2, 5, 96)
+        # print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
         print('segment_pred - init - ', segment_pred) # (2, 5, 96)
         # ####
         segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 480, 1)
-        print('segment_targets - mean - ', segment_targets.shape)
+        # print('segment_targets - mean - ', segment_targets.shape)
         segment_targets = torch.flatten(segment_targets, 0, 1) #(960, 1)
-        print('segment_targets - flatten - ', segment_targets.shape)
+        # print('segment_targets - flatten - ', segment_targets.shape)
 
         segment_pred = segment_pred.permute(0, 2, 1) # (2, 96, 5)
         segment_pred = torch.flatten(segment_pred, 0, 2).unsqueeze(1)
-        print('segment_pred - flatten - ', segment_pred.shape) # (960, 1)
+        # print('segment_pred - flatten - ', segment_pred.shape) # (960, 1)
 
         segment_weights = torch.mean(segment_weights, dim=2).unsqueeze(2) #(2, 480, 1)
-        print('segment_weights - mean - ', segment_weights.shape)
+        # print('segment_weights - mean - ', segment_weights.shape)
         segment_weights = torch.flatten(segment_weights, 0, 1) #(960, 1)
-        print('segment_weights - flatten - ', segment_weights.shape)
+        # print('segment_weights - flatten - ', segment_weights.shape)
 
         # #### segment anchor method
         # segment_targets = segment_targets.reshape(-1, 2)

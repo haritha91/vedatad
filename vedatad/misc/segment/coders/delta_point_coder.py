@@ -59,8 +59,8 @@ class DeltaPointCoder(BaseSegmentCoder):
             torch.Tensor: Decoded segments.
         """
         print('delta_point decoder')
-        print('decoder pred_segments - ', pred_segments.shape)
-        print('decoder segments - ', segments.shape)
+        # print('decoder pred_segments - ', pred_segments.shape)
+        # print('decoder segments - ', segments.shape)
         # print('pred_segments - ', pred_segments)
         # print('segments - ', segments)
         assert pred_segments.size(0) == segments.size(0)
@@ -166,8 +166,8 @@ def delta2point(rois, deltas, means=(0.), stds=(1.), max_t=None):
                 [5.0000]])
     """
     print('delta2point method')
-    print('deltas - ', deltas.shape)
-    print('rois - ', rois.shape)
+    # print('deltas - ', deltas.shape)
+    # print('rois - ', rois.shape)
 
 
     means = deltas.new_tensor(means).repeat(1, deltas.size(0) // 2)
@@ -175,18 +175,18 @@ def delta2point(rois, deltas, means=(0.), stds=(1.), max_t=None):
     # denorm_deltas = deltas * stds + means
     denorm_deltas = deltas
 
-    print('means shape - ', means.shape)
-    print('stds shape - ', stds.shape)
-    print('denorm_deltas - shape - ', denorm_deltas.shape)
+    # print('means shape - ', means.shape)
+    # print('stds shape - ', stds.shape)
+    # print('denorm_deltas - shape - ', denorm_deltas.shape)
 
     # Use delta to shift the center of each roi
     point = rois +  denorm_deltas
 
-    print('point - ', point.shape)
+    # print('point - ', point.shape)
 
     if max_t is not None:
         point = start.clamp(min=0, max=max_t)
     points = torch.stack([point], dim=-1).view_as(deltas) #view as is deltas in original
 
-    print('points - ', points.shape)
+    # print('points - ', points.shape)
     return points
