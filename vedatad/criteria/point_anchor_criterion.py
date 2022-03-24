@@ -120,7 +120,6 @@ class PointAnchorCriterion(BaseCriterion):
                 num_total_neg (int): Number of negative samples in all videos
         """
 
-        print('gt_segments - ', gt_segments)
 
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
@@ -143,6 +142,8 @@ class PointAnchorCriterion(BaseCriterion):
                                   self.background_label,
                                   dtype=torch.long)
         label_weights = anchors.new_zeros(num_valid_anchors, dtype=torch.float)
+
+        print('segment targets', segment_targets)
 
         pos_inds = sampling_result.pos_inds
         neg_inds = sampling_result.neg_inds
