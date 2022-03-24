@@ -194,7 +194,7 @@ class PointAnchorCriterion(BaseCriterion):
         # print('labels shape - ', labels.shape)
 
         # print('shape of segment targets [0]', segment_targets[0].shape)
-        print(segment_targets)
+
         # print('segment targets[0] - ', segment_targets[0])
 
         return (labels, label_weights, segment_targets, segment_weights,
@@ -247,6 +247,9 @@ class PointAnchorCriterion(BaseCriterion):
                 to properties at each feature map (i.e. having T dimension).
                 The results will be concatenated after the end
         """
+
+        print('gt_segments list - ', gt_segments_list)
+
         num_videos = len(video_metas)
         assert len(anchor_list) == len(valid_flag_list) == num_videos
 
