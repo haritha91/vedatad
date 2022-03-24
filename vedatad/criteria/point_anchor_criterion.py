@@ -154,9 +154,10 @@ class PointAnchorCriterion(BaseCriterion):
                 pos_segment_targets = self.segment_coder.encode(
                     sampling_result.pos_segments,
                     sampling_result.pos_gt_segments)
-                print('pos segment targets', pos_segment_targets)
+                
             else:
                 pos_segment_targets = sampling_result.pos_gt_segments
+                print('pos segment targets', pos_segment_targets)
             segment_targets[pos_inds, :] = pos_segment_targets
             segment_weights[pos_inds, :] = 1.0
             if gt_labels is None:
