@@ -153,11 +153,10 @@ class PointAnchorCriterion(BaseCriterion):
                 print('before encode method')
                 pos_segment_targets = self.segment_coder.encode(
                     sampling_result.pos_segments,
-                    sampling_result.pos_gt_segments)
-                
+                    sampling_result.pos_gt_segments)         
             else:
                 pos_segment_targets = sampling_result.pos_gt_segments
-                print('pos segment targets', pos_segment_targets)
+                
             segment_targets[pos_inds, :] = pos_segment_targets
             segment_weights[pos_inds, :] = 1.0
             if gt_labels is None:
@@ -188,13 +187,14 @@ class PointAnchorCriterion(BaseCriterion):
             segment_weights = unmap(segment_weights, num_total_anchors,
                                     inside_flags)
 
+
         # print('shape of segment targets - ', segment_targets.shape)
 
         # print('segment weights shape', segment_weights.shape)
         # print('labels shape - ', labels.shape)
 
         # print('shape of segment targets [0]', segment_targets[0].shape)
-        # print(segment_targets)
+        print(segment_targets)
         # print('segment targets[0] - ', segment_targets[0])
 
         return (labels, label_weights, segment_targets, segment_weights,
