@@ -120,6 +120,8 @@ class PointAnchorCriterion(BaseCriterion):
                 num_total_neg (int): Number of negative samples in all videos
         """
 
+        print('gt_segments - ', gt_segments)
+
         inside_flags = anchor_inside_flags(flat_anchors, valid_flags,
                                            video_meta['tsize'],
                                            self.train_cfg.allowed_border)
@@ -356,7 +358,7 @@ class PointAnchorCriterion(BaseCriterion):
         # print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
         # print('segment_pred - init - ', segment_pred.shape) # (2, 5, 96)
         # print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
-        print('segment_pred - init - ', segment_pred) # (2, 5, 96)
+        # print('segment_pred - init - ', segment_pred) # (2, 5, 96)
         # ####
         segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 480, 1)
         # print('segment_targets - mean - ', segment_targets.shape)
