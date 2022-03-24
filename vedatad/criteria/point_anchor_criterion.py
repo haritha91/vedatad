@@ -143,10 +143,13 @@ class PointAnchorCriterion(BaseCriterion):
                                   dtype=torch.long)
         label_weights = anchors.new_zeros(num_valid_anchors, dtype=torch.float)
 
-        print('segment targets', segment_targets)
 
         pos_inds = sampling_result.pos_inds
         neg_inds = sampling_result.neg_inds
+
+        print('pos inds', pos_inds)
+        print('neg inds', neg_inds)        
+
         if len(pos_inds) > 0:
             if not self.reg_decoded_segment:
                 print('before encode method')
