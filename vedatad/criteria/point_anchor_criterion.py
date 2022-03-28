@@ -248,7 +248,7 @@ class PointAnchorCriterion(BaseCriterion):
                 The results will be concatenated after the end
         """
 
-        print('gt_segments list - ', gt_segments_list)
+        # print('gt_segments list - ', gt_segments_list)
 
         num_videos = len(video_metas)
         assert len(anchor_list) == len(valid_flag_list) == num_videos
@@ -295,6 +295,7 @@ class PointAnchorCriterion(BaseCriterion):
                                                 num_level_anchors)
         segment_weights_list = videos_to_levels(all_segment_weights,
                                                 num_level_anchors)
+        print('segment_targets list - ', segment_targets_list)
         res = (labels_list, label_weights_list, segment_targets_list,
                segment_weights_list, num_total_pos, num_total_neg)
         if return_sampling_results:
