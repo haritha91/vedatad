@@ -295,7 +295,7 @@ class PointAnchorCriterion(BaseCriterion):
                                                 num_level_anchors)
         segment_weights_list = videos_to_levels(all_segment_weights,
                                                 num_level_anchors)
-        print('segment_targets list - ', segment_targets_list)
+
         res = (labels_list, label_weights_list, segment_targets_list,
                segment_weights_list, num_total_pos, num_total_neg)
         if return_sampling_results:
@@ -368,6 +368,7 @@ class PointAnchorCriterion(BaseCriterion):
         # print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
         # print('segment_pred - init - ', segment_pred) # (2, 5, 96)
         # ####
+        print('segment_targets - ', segment_targets)
         segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 480, 1)
         # print('segment_targets - mean - ', segment_targets.shape)
         segment_targets = torch.flatten(segment_targets, 0, 1) #(960, 1)
