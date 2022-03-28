@@ -368,7 +368,7 @@ class PointAnchorCriterion(BaseCriterion):
         # print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
         # print('segment_pred - init - ', segment_pred) # (2, 5, 96)
         # ####
-        print('segment_targets - ', segment_targets)
+        print('segment_pred - ', segment_pred)
         segment_targets = torch.mean(segment_targets, dim=2).unsqueeze(2) #(2, 480, 1)
         # print('segment_targets - mean - ', segment_targets.shape)
         segment_targets = torch.flatten(segment_targets, 0, 1) #(960, 1)
