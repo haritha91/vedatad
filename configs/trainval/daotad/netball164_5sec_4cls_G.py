@@ -132,7 +132,7 @@ meshgrid = dict(
         scales_per_octave=scales_per_octave))
 
 segment_coder = dict(
-    typename='DeltaPointCoder', #DeltaSegmentCoder | DeltaPointCoder
+    typename='DeltaSegmentCoder', #DeltaSegmentCoder | DeltaPointCoder
     target_means=[.0, .0],
     target_stds=[1.0, 1.0])
 
