@@ -85,6 +85,7 @@ class SegmentAnchorConverter(BaseConverter):
                 of the segment. The third item is a (n,) tensor where each item
                 is the predicted centerness score of the segment.
         """
+        print('_get_segments_single')
         tsize = video_metas['tsize']
         tscale_factor = video_metas['tscale_factor']
         tshift = video_metas['tshift']
