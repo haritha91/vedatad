@@ -42,6 +42,7 @@ class SegmentAnchorConverter(BaseConverter):
 
         Example:
         """
+        print('GET SEGMENTS')
         assert len(cls_scores) == len(segment_preds)
         num_levels = len(cls_scores)
 
