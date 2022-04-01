@@ -41,6 +41,7 @@ class SingleStageDetector(BaseDetector):
     def forward(self, x, train=True):
         if train:
             self.train()
+            print('feats - ', x)
             feats = self.forward_impl(x)
         else:
             self.eval()
