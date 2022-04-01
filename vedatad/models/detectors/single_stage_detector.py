@@ -47,5 +47,4 @@ class SingleStageDetector(BaseDetector):
             self.eval()
             with torch.no_grad():
                 feats = self.forward_impl(x)
-        print('feats - ', feats)
         return feats
