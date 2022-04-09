@@ -1,4 +1,4 @@
-# 1. data
+# 1. data - 3 seconds
 dataset_type = 'Netball1603Dataset'
 data_root = 'data/netball164/'
 img_norm_cfg = dict(
