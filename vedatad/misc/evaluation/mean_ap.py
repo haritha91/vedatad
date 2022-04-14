@@ -355,8 +355,8 @@ def eval_map(det_results,
 
         # choose proper function according to datasets to compute tp and fp
         if mode in ['anet']:
-            # tpfp_func = tpfp_anet
-            tpfp_func = tpfp_distance_anet
+            # tpfp_func = tpfp_anet 
+            tpfp_func = tpfp_distance_anet #based on the distance
         else:
             # tpfp_func = tpfp_default
             tpfp_func = tpfp_distance
