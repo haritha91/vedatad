@@ -363,7 +363,7 @@ class PointAnchorCriterion(BaseCriterion):
         # (2, 1*5, 96)
         # (960, 1)
         print('regression loss - point')
-        # print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
+        print('segment_targets - init - ', segment_targets.shape) #(2,480,2)
         # print('segment_pred - init - ', segment_pred.shape) # (2, 5, 96)
         # print ('segment_weights - init - ', segment_weights.shape) # (2, 480, 2)
         # print('segment_pred - init - ', segment_pred) # (2, 5, 96)
